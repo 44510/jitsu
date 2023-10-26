@@ -40,6 +40,9 @@ export type FetchOpts = {
   headers?: Record<string, string>;
   body?: string;
 };
+
+export type StoreFactory = (scope: "workspace" | "connection") => Store;
+
 export type FunctionContext = {
   log: {
     info: (message: string, ...args: any[]) => void;
@@ -48,7 +51,7 @@ export type FunctionContext = {
     error: (message: string, ...args: any[]) => void;
   };
   fetch: FetchType;
-  store: Store;
+  store: Store & StoreFactory;
 };
 
 export type PrivacyOpts = {

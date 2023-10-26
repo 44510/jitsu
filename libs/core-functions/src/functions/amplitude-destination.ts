@@ -10,8 +10,12 @@ dayjs.extend(utc);
 
 const AmplitudeDestination: JitsuFunction<AnalyticsServerEvent, AmplitudeDestinationConfig> = async (
   event,
-  { props, fetch, log, geo, destination }
+  { props, fetch, log, geo, destination, store }
 ) => {
+  const workspaceStore = store("workspace");
+  const sessionId = (await workspaceStore.get("amplitude_session_id")) || randomUUID();
+  await workspaceStore.set("amplitude_session_id", sessionId, { ttlSec: 3600 });
+
   try {
     const groupType = props.groupType || "group";
     const deviceId = event.anonymousId;
